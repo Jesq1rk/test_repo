@@ -2,6 +2,7 @@
 #тестовые данные. Выводим только для сущности с URL-адресом http://agurya5e.beget.tech/about/;
 $arParams['ID']=null;
 $arParams['ENT_TYPE']=2;
+$arParams['HL_ID']=4;
 $arParams['URL_TO_REVIEW'] = explode('?', $_SERVER['REQUEST_URI'])[0];
 use Bitrix\Main\Loader;
 use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
@@ -86,13 +87,12 @@ switch($arParams['ENT_TYPE']){
       $arFilter =array('UF_URL_ID'=>explode('?', $_SERVER['REQUEST_URI'])[0]);
       break;
 };
-$hlblock = HLBT::getById(4)->fetch();
+$hlblock = HLBT::getById($arParams['HL_ID'])->fetch();
 $entity = HLBT::compileEntity($hlblock);
 $entity_data_class = $entity->getDataClass();
-
 $rsData = $entity_data_class::getList(array(
    'select' => array('*'),
-   'filter'=>array('UF_URL_ID'=>explode('?', $_SERVER['REQUEST_URI'])[0])
+   'filter'=>$arFilter
 ));
 while($el = $rsData->fetch()){
   $arResult['REVIEWS'][]=$el;
